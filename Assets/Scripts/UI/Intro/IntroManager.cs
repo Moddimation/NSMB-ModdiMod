@@ -1,3 +1,5 @@
+#define DISABLE_SCENE_CHANGE
+
 using JimmysUnityUtilities;
 using NSMB.Utilities.Extensions;
 using Quantum;
@@ -15,60 +17,56 @@ namespace NSMB.UI.Intro {
 
         //---Serialized Variables
         [SerializeField] private GameObject others;
-        [SerializeField] private Image fullscreenImage, logo;
-        [SerializeField] private AudioSource sfx;
-        [SerializeField] private List<SoundEffect> excludedSounds;
+        [SerializeField] private Image fullscreenImage, logo, sublogo;
+        [SerializeField] private AudioSource sfx, sfxPan;
+        [SerializeField] private Color  fadeColor;
         [SerializeField] private float logoBounceDuration = 0.1f, logoBounceHeight = 15f;
 
         //---Private Variables
-        private SoundEffectDataAttribute[] possibleSfx;
-        private CharacterAsset[] possibleCharacters;
         private Coroutine logoBounceRoutine;
 
         public void Start() {
             StartCoroutine(IntroSequence());
-            possibleSfx = ((SoundEffect[]) Enum.GetValues(typeof(SoundEffect)))
-                .Where(se => !excludedSounds.Contains(se))
-                .Select(se => se.GetSoundData())
-                .Where(sd => sd.Sound.Contains("{char}"))
-                .ToArray();
-            possibleCharacters = GlobalController.Instance.config.CharacterDatas
-                .Select(ar => QuantumUnityDB.GetGlobalAsset(ar))
-                .ToArray();
         }
 
         public void PlayRandomCharacterSound() {
-            SoundEffectDataAttribute data = possibleSfx[UnityEngine.Random.Range(0, possibleSfx.Length)];
-            CharacterAsset character = possibleCharacters[UnityEngine.Random.Range(0, possibleCharacters.Length)];
-            int variant = data.Variants <= 1 ? 0 : UnityEngine.Random.Range(1, data.Variants + 1);
-
-            sfx.PlayOneShot(data, character, variant);
-
-            if (logoBounceRoutine != null) {
-                StopCoroutine(logoBounceRoutine);
-            }
-            logoBounceRoutine = StartCoroutine(LogoBounce());
+            sfxPan.Play();
+            sfx.Stop();
         }
 
         private IEnumerator LogoBounce() {
             float time = logoBounceDuration;
 
             RectTransform logoTf = (RectTransform) logo.transform;
+            RectTransform logosTf = (RectTransform) sublogo.transform;
             while (time > 0) {
                 time -= Time.deltaTime;
                 time = Mathf.Max(0, time);
 
-                logoTf.SetAnchoredPositionY(Mathf.Sin(time * Mathf.PI / logoBounceDuration) * logoBounceHeight);
+                float pos = Mathf.Sin(time * Mathf.PI / logoBounceDuration) * logoBounceHeight;
+                logoTf.SetAnchoredPositionY(pos);
+                logosTf.SetAnchoredPositionY(pos);
                 yield return null;
             }
             logoBounceRoutine = null;
+        }
+
+        private IEnumerator LogoColor() {
+            for (float a = 0; a <= 1; a += 0.07f) {
+                Color c = new Color(1f, 1f, 1f, a);
+                logo.color = c;
+                sublogo.color = c;
+
+                yield return new WaitForSeconds(0.1f);
+            }
         }
 
         private IEnumerator IntroSequence() {
             yield return new WaitForSeconds(0.75f);
             sfx.Play();
             yield return FadeImageToValue(fullscreenImage, 0, 0.33f);
-            yield return new WaitForSeconds(0.5f);
+            yield return LogoColor();
+            yield return new WaitForSeconds(0.8f);
 
 #if !DISABLE_SCENE_CHANGE
             AsyncOperation sceneLoad = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
@@ -76,11 +74,11 @@ namespace NSMB.UI.Intro {
 #endif
 
             yield return new WaitForSeconds(0.75f);
-            fullscreenImage.color = new Color(0, 0, 0, 0);
-            yield return FadeImageToValue(fullscreenImage, 1, 0.33f);
+            fullscreenImage.color = fadeColor;
+            yield return FadeImageToValue(fullscreenImage, 1, 0.43f);
 
             EventSystem.current.gameObject.SetActive(false);
-            
+
             yield return new WaitForSeconds(0.75f);
 
 #if !DISABLE_SCENE_CHANGE
