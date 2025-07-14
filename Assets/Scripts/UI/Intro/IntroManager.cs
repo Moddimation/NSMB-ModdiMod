@@ -1,5 +1,4 @@
-#define DISABLE_SCENE_CHANGE
-
+//#define DISABLE_SCENE_CHANGE
 using JimmysUnityUtilities;
 using NSMB.Utilities.Extensions;
 using Quantum;
