@@ -7,6 +7,7 @@ namespace NSMB.UI.Elements {
     public class GIF : MonoBehaviour {
 
         //---Serialized Variables
+        [SerializeField] private bool repeat = true;
         [SerializeField] private bool reverse = false;
         [SerializeField] private float latency = 0.1f;
         [SerializeField] private Sprite[] frames;
@@ -40,20 +41,25 @@ namespace NSMB.UI.Elements {
 
         private IEnumerator PlayChain() {
             while (!isStop) {
-                Debug.Log("00");
                 Iter();
-
-                Debug.Log("0");
 
                 if ((index < 0) || (index >= frames.Length)) {
                     next.enabled = true;
                     isStop = true;
-                    Debug.Log("1");
                 } else {
-                    Debug.Log("2");
                     yield return new WaitForSeconds(latency);
                 }
-                Debug.Log("3");
+            }
+        }
+        private IEnumerator PlayOnce() {
+            while (!isStop) {
+                Iter();
+
+                if ((index < 0) || (index >= frames.Length)) {
+                    isStop = true;
+                } else {
+                    yield return new WaitForSeconds(latency);
+                }
             }
         }
 
@@ -64,10 +70,10 @@ namespace NSMB.UI.Elements {
             isStop = false;
             index = 0;
 
-            Debug.Log($"next : {next}");
-
             if (next == null) {
                 StartCoroutine(PlayLoop());
+            } else if (repeat == false) {
+                StartCoroutine(PlayOnce());
             } else {
                 StartCoroutine(PlayChain());
             }
