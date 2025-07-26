@@ -20,7 +20,6 @@ namespace NSMB.UI.Elements {
 
         private void Iter() {
             image.sprite = frames[index];
-
             index = reverse ? index - 1 : index + 1;
         }
 
@@ -44,8 +43,9 @@ namespace NSMB.UI.Elements {
                 Iter();
 
                 if ((index < 0) || (index >= frames.Length)) {
-                    next.enabled = true;
-                    isStop = true;
+                    if (next != null) next.enabled = true;
+                    Stop();
+                    yield return null;
                 } else {
                     yield return new WaitForSeconds(latency);
                 }
@@ -56,7 +56,8 @@ namespace NSMB.UI.Elements {
                 Iter();
 
                 if ((index < 0) || (index >= frames.Length)) {
-                    isStop = true;
+                    Stop();
+                    yield return null;
                 } else {
                     yield return new WaitForSeconds(latency);
                 }
@@ -65,28 +66,34 @@ namespace NSMB.UI.Elements {
 
         public void Stop() {
             isStop = true;
+            this.enabled = false;
+            StopAllCoroutines();  // <--- Stop coroutines on Stop()
         }
         public void Play() {
+            StopAllCoroutines();  // <--- Stop any running coroutine before starting new one
             isStop = false;
             index = 0;
 
-            if (next == null) {
-                StartCoroutine(PlayLoop());
-            } else if (repeat == false) {
+            if (repeat == false) {
                 StartCoroutine(PlayOnce());
+            } else if (next == null) {
+                StartCoroutine(PlayLoop());
             } else {
                 StartCoroutine(PlayChain());
             }
         }
 
         private void Init() {
-            image = gameObject.GetComponent<Image>();
-
             if (image == null) {
-                Debug.LogError("GIF NEEDS IMAGE COMPONENT");
-            } else {
-                Play();
+                image = gameObject.GetComponent<Image>();
+
+                if (image == null) {
+                    Debug.LogError("GIF NEEDS IMAGE COMPONENT");
+                    return;
+                }
             }
+
+            Play();
         }
 
         void Start() {
