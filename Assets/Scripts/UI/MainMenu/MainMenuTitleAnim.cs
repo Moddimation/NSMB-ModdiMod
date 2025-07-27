@@ -7,57 +7,62 @@ namespace NSMB.UI.MainMenu {
         [SerializeField] private RectTransform titleMain, titleSub;
         [SerializeField] private UI.Elements.GIF titleGif;
         [SerializeField] private float latency = 6f;
-        [SerializeField] private float latencySub = 800;
+        [SerializeField] private float latencySub = 820f;
+        [SerializeField] private float waitSub = 1.4f;
 
-        private float temp = 0.0f;
         private float waitTimer = 0.0f;
         private int state = 0;
 
         void Awake() {
-            temp = -3.0f;
-            state = 0;
-            SetSubY(100);
+               SetMainX(-1024f);
+               state = 0;
+               SetSubY(100);
         }
 
         void Update() {
-            if(waitTimer > 0f) {
-                waitTimer -= Time.deltaTime;
-                return;
-            }
-
-            if (state == 0) {
-                AnimMain();
-            } else if (state == 1) {
-                AnimSub();
-            } else if (state == 2) {
-                enabled = false;
-            }
+               if (state == 0) {
+                      AnimMain();
+               } else if (state == 1) {
+                      AnimSub();
+               } else if (state == 2) {
+                      enabled = false;
+               }
         }
 
         private void AnimMain() {
-            if (temp < 0.5f) {
-                titleMain.SetPivotX(temp);
+            float mainSpeed = 1024f * latency / 3.5f;
+            var pos = titleMain.anchoredPosition;
+            pos.x = Mathf.MoveTowards(pos.x, 0f, mainSpeed * Time.deltaTime);
+            titleMain.anchoredPosition = pos;
 
-                temp += latency * Time.deltaTime;
-            } else {
+            if (pos.x == 0f) {
                 titleGif.enabled = true;
-                waitTimer = 1f;
-                temp = 100;
+                FindFirstObjectByType<Sound.LoopingMusicPlayer>().Restart();
+                waitTimer = waitSub;
                 state = 1;
             }
         }
 
         private void AnimSub() {
-            if (temp > 0) {
-                SetSubY(temp);
+            if (waitTimer > 0f) {
+                waitTimer -= Time.deltaTime;
+                return;
+            }
 
-                temp -= latencySub * Time.deltaTime;
-            } else {
+            var pos = titleSub.anchoredPosition;
+            pos.y = Mathf.MoveTowards(pos.y, 0f, latencySub * Time.deltaTime);
+            titleSub.anchoredPosition = pos;
+
+            if (pos.y == 0f) {
                 state = 2;
             }
         }
+
         private void SetSubY(float y) {
-            titleSub.anchoredPosition = new Vector2(titleSub.anchoredPosition.x, y);
+               titleSub.anchoredPosition = new Vector2(titleSub.anchoredPosition.x, y);
+        }
+        private void SetMainX(float x) {
+               titleMain.anchoredPosition = new Vector2(x, titleSub.anchoredPosition.y);
         }
     }
 }

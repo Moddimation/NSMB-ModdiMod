@@ -1,5 +1,6 @@
-*.xcf
-*.xcf.meta
+*.mmpz*
+*.sf2*
+*.xcf*
 /[Aa]ssets/[Ss]cripts/[Bb]uild[Ii].nfo.cs
 /[Aa]ssets/[Rr]esources/[Pp]erformance[Tt]est[Rr]un*
 # This .gitignore file should be placed at the root of your Unity project directory

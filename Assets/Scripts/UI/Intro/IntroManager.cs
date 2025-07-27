@@ -18,10 +18,10 @@ namespace NSMB.UI.Intro {
         [SerializeField] private Image fullscreenImage, logo, sublogo;
         [SerializeField] private AudioSource sfx, sfxPan;
         [SerializeField] private Color  fadeColor;
-        [SerializeField] private float logoBounceDuration = 0.1f, logoBounceHeight = 15f;
-
-        //---Private Variables
-        private Coroutine logoBounceRoutine;
+        [SerializeField] private float appearDiff = 0.05f;
+        [SerializeField] private float appearwait = 0.1f;
+        [SerializeField] private float unhideDiff = 0.1f;
+        [SerializeField] private float hideDiff = 0.43f;
 
         public void Start() {
             StartCoroutine(IntroSequence());
@@ -32,52 +32,37 @@ namespace NSMB.UI.Intro {
             sfx.Stop();
         }
 
-        private IEnumerator LogoBounce() {
-            float time = logoBounceDuration;
-
-            RectTransform logoTf = (RectTransform) logo.transform;
-            RectTransform logosTf = (RectTransform) sublogo.transform;
-            while (time > 0) {
-                time -= Time.deltaTime;
-                time = Mathf.Max(0, time);
-
-                float pos = Mathf.Sin(time * Mathf.PI / logoBounceDuration) * logoBounceHeight;
-                logoTf.SetAnchoredPositionY(pos);
-                logosTf.SetAnchoredPositionY(pos);
-                yield return null;
-            }
-            logoBounceRoutine = null;
-        }
-
         private IEnumerator LogoColor() {
-            for (float a = 0; a <= 1; a += 0.07f) {
+            for (float a = 0; a <= 1; a += appearDiff) {
                 Color c = new Color(1f, 1f, 1f, a);
                 logo.color = c;
                 sublogo.color = c;
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(appearwait);
             }
         }
 
         private IEnumerator IntroSequence() {
-            yield return new WaitForSeconds(0.75f);
+            yield return new WaitForSeconds(0.5f);
+            yield return FadeImageToValue(fullscreenImage, 0, unhideDiff);
             sfx.Play();
-            yield return FadeImageToValue(fullscreenImage, 0, 0.33f);
+            yield return new WaitForSeconds(0.2f);
             yield return LogoColor();
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(4f);
+            sfxPan.Play();
 
 #if !DISABLE_SCENE_CHANGE
             AsyncOperation sceneLoad = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
             sceneLoad.allowSceneActivation = false;
 #endif
 
-            yield return new WaitForSeconds(0.75f);
+            yield return new WaitForSeconds(0.25f);
             fullscreenImage.color = fadeColor;
-            yield return FadeImageToValue(fullscreenImage, 1, 0.43f);
+            yield return FadeImageToValue(fullscreenImage, 1, hideDiff);
 
             EventSystem.current.gameObject.SetActive(false);
 
-            yield return new WaitForSeconds(0.75f);
+            yield return new WaitForSeconds(1f);
 
 #if !DISABLE_SCENE_CHANGE
             while (sceneLoad.progress < 0.9f) {

@@ -1,3 +1,8 @@
+<color=blue>ModdiMod Credits</color>
+Moddimation
+
+<color=red>Original Credits</color>
+
 <color=yellow>{ui.about.credits.gameby}</color>
 ipodtouch0218
 

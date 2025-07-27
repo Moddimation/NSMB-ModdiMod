@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.046126485, g: 0.046126485, b: 0.046126485, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.28436798, g: 0.28436798, b: 0.28436798, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -669,7 +669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1457443763}
   m_Layer: 5
-  m_Name: Others
+  m_Name: Elements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -921,8 +921,10 @@ MonoBehaviour:
   sfx: {fileID: 1530602097}
   sfxPan: {fileID: 1530602099}
   fadeColor: {r: 0, g: 0, b: 0, a: 0}
-  logoBounceDuration: 0.05
-  logoBounceHeight: 15
+  appearDiff: 0.066
+  appearwait: 0.14
+  unhideDiff: 1
+  hideDiff: 1
 --- !u!82 &1530602099
 AudioSource:
   m_ObjectHideFlags: 0
