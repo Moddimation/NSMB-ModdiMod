@@ -33,7 +33,7 @@ namespace NSMB.Networking {
                 GameVersion remoteVersion = GameVersion.Parse(tag);
                 GameVersion localVersion = GameVersion.Parse(Application.version);
 
-                bool upToDate = localVersion >= remoteVersion;
+                bool upToDate = true;//localVersion >= remoteVersion;
                 Debug.Log($"[Updater] Local version: {localVersion} / Remote version: {remoteVersion}. Up to date: {upToDate}");
 
                 callback(upToDate, tag);

@@ -13,8 +13,9 @@ public class CharacterAsset : AssetObject {
     public Sprite LoadingSmallSprite;
     public Sprite LoadingLargeSprite;
     public Sprite ReadySprite;
+    public Sprite IconSprite;
 
     public RuntimeAnimatorController SmallOverrides;
     public RuntimeAnimatorController LargeOverrides;
-#endif 
+#endif
 }

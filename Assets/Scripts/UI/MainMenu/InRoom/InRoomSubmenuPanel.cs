@@ -10,7 +10,7 @@ namespace NSMB.UI.MainMenu.Submenus.InRoom {
         public virtual bool IsInSubmenu => false;
 
         //---Serialized Variables
-        [SerializeField] protected InRoomSubmenu menu;
+        [SerializeField] public InRoomSubmenu menu;
         [SerializeField] public InRoomSubmenuPanel leftPanel, rightPanel;
         [SerializeField] private List<GameObject> hideWhenNotSelected;
         [SerializeField] private GameObject defaultSelectedObject;
