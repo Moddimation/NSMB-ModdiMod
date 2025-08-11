@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      waluigi_eyes_0: 7259656038251196356
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

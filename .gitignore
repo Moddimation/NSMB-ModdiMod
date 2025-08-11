@@ -1,8 +1,16 @@
-*.mmpz*
-*.sf2*
-*.xcf*
-/[Aa]ssets/[Ss]cripts/[Bb]uild[Ii].nfo.cs
-/[Aa]ssets/[Rr]esources/[Pp]erformance[Tt]est[Rr]un*
+*.mmpz
+*.mmpz.bak
+*.mmpz.bak.meta
+*.mmpz..meta
+*.sf2
+*.sf2.meta
+*.xcf
+*.xcf.meta
+/[Aa]ssets/[Ss]cripts/[Bb]uild[Ii].nf*
+/[Aa]ssets/[Rr]esources/[Pp]erformance[Tt]est[Rr]unInfo.json
+/[Aa]ssets/[Rr]esources/[Pp]erformance[Tt]est[Rr]unInfo.json.meta
+/[Aa]ssets/[Rr]esources/[Pp]erformance[Tt]est[Rr]unSettings.json
+/[Aa]ssets/[Rr]esources/[Pp]erformance[Tt]est[Rr]unSettings.json.meta
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore

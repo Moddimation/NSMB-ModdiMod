@@ -297,7 +297,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      waluigi_head_0: -5198575640007063800
+      waluigi_head_1: -2439909996227146204
+      waluigi_head_2: -7820471057556651690
+      waluigi_head_3: -8580959028004084367
+      waluigi_head_4: -7067799782322801970
+      waluigi_head_5: -6228444051480350865
+      waluigi_head_6: -2582551177898138868
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
